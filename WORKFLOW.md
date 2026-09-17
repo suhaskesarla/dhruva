@@ -32,8 +32,8 @@ codex:
   approval_policy: never
   thread_sandbox: workspace-write
   turn_sandbox_policy:
-    type: workspaceWrite
-    networkAccess: true
+    # Full access is required for Git lifecycle operations in isolated Symphony workspaces; branch, review, and main-protection rules still apply.
+    type: dangerFullAccess
 ---
 
 # Dhruva — Week 1 agent workflow
