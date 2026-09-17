@@ -1,0 +1,27 @@
+{
+  "name": "dhruva",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "typecheck": "pnpm --filter api exec tsc --noEmit && pnpm --filter mobile exec tsc --noEmit",
+    "lint": "pnpm --filter api lint",
+    "build": "pnpm --filter api build && pnpm --filter mobile exec expo export --platform android --output-dir dist",
+    "check": "pnpm peers check && pnpm run typecheck && pnpm run lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.4.1",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.4.1",
+  "type": "module",
+  "private": true
+}
