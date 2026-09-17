@@ -46,6 +46,8 @@ You are working on exactly one issue in its isolated workspace. At entry and bef
 
 Normal tickets use the existing implementation flow below. Tickets labeled `independent-review` use only the Independent review flow as an independent Tech Lead/QA reviewer and must not implement or modify code. Both ticket types require the `symphony` label. Shared scope, authority, prerequisite and Blocked rules apply to both; review scope is the referenced implementation contract and complete implementation diff. The shared integration branch is `symphony/week1`; Done requires independent review and integration into `origin/symphony/week1`.
 
+Every associated independent-review ticket must use Linear priority **1/Urgent**, including when created, reused or reactivated. Ordinary imported Week 1 implementation tickets use the lower priority **2/High**. Dispatch eligible review tickets before another implementation ticket so independent review and integration run first; retain `max_concurrent_agents: 1` and all existing eligibility, claim and prerequisite checks.
+
 ## Non-negotiable limits
 
 - Linear is the sole authority for current delivery state; do not create or maintain another current-state document.
@@ -73,7 +75,7 @@ Normal tickets use the existing implementation flow below. Tickets labeled `inde
 >
 > Implement only the listed Work/Functions in the allowed Files. Validate the stated Done condition and record evidence honestly; do not fabricate real captures or human verification. If it cannot be met within scope, use Blocked. Otherwise inspect the complete implementation diff for off-list changes, run `git diff --check`, and commit and push the task branch. Before moving to In Review, record in Linear: implementation ticket, branch, exact pushed commit SHA, changed files, tests run and results, dependency commits verified, and `git diff --check` result.
 >
-> Create or reactivate exactly one associated review ticket in the same Linear project, assigned to `me`, in Ready, with both `symphony` and `independent-review` labels. Its description must identify the implementation ticket, implementation branch and exact commit SHA. Link the tickets as associated work, not dependency blockers or a Depends on relationship requiring implementation Done before review. Reuse the same review ticket after fixes, updating its branch/SHA evidence; never create duplicates. Then move the implementation ticket to In Review and stop. This handoff is not Done.
+> Create or reactivate exactly one associated review ticket in the same Linear project, assigned to `me`, in Ready, at priority **1/Urgent**, with both `symphony` and `independent-review` labels. Its description must identify the implementation ticket, implementation branch and exact commit SHA. Link the tickets as associated work, not dependency blockers or a Depends on relationship requiring implementation Done before review. Reuse the same review ticket after fixes, updating its branch/SHA evidence and retaining priority **1/Urgent**; never create duplicates. Then move the implementation ticket to In Review and stop. This handoff is not Done.
 
 ## Independent review flow
 
