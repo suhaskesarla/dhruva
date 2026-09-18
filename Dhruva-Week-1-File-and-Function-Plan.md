@@ -261,9 +261,9 @@ git diff --check
 
 ### W1-03 — Apply the baseline and conversation migration
 
-**Files:** `supabase/config.toml`; `202609080001_base.sql`; supplied `202609080002_conversations_messages.sql` under `supabase/migrations/`.
+**Files:** `supabase/config.toml`; `202609080001_base.sql`; `202609080002_conversations_messages.sql` under `supabase/migrations/`.
 **Functions:** none; DDL only.
-**Work:** transcribe original §1.1 and append the revised supplied migration with indexed `items.source_message_id` and no `messages.item_id`. Keep future-system tables inert.
+**Work:** transcribe original §1.1. W1-03 is authorized to author `supabase/migrations/202609080002_conversations_messages.sql` directly from the authoritative schema requirements in plan §7, the architecture addendum, and resolved decision B3. These sources replace the unavailable “supplied migration” artifact. Introduce no schema behavior beyond those authoritative sources. Include indexed `items.source_message_id` and no `messages.item_id`. Keep future-system tables inert. Preserve the security requirements, relationship restrictions, indexes and migration validation requirements in §8. The ticket must become Blocked again if any SQL behavior is unspecified or contradictory.
 **Done:** a fresh disposable Supabase reset succeeds; singleton/check/FK restrictions and history indexes exist; anon/authenticated cannot access messages; the server can insert a user message and a reply-linked assistant response plus multiple items referencing the same original message.
 **Depends on:** W1-01. Does not need live Gemini or mobile auth.
 
