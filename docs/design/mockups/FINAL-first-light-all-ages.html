@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dhruva — Final: First Light (all ages)</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ts:1;--slate-boost:#4E5860;--fog:#F0EFEC;--paper:#F8F7F5;--ink:#232A30;--slate:#5F6970;--mist:#CDD0CF;--light:#A67722;--light-soft:#EADFC4;--ok:#4F7A6A;--btn-bg:#232A30;--btn-fg:#F8F7F5;--shadow:0 30px 60px rgba(35,42,48,.16);}
+[data-theme="dark"]{--slate-boost:#B4BCC2;--fog:#171A1D;--paper:#1F2327;--ink:#E6E8E9;--slate:#98A1A8;--mist:#30363B;--light:#D4A64A;--light-soft:#3A3122;--ok:#4F7A6A;--btn-bg:#E6E8E9;--btn-fg:#171A1D;--shadow:0 30px 60px rgba(0,0,0,.5);}
+*{box-sizing:border-box}
+  html,body{margin:0;background:var(--fog);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:calc(17px * var(--ts));line-height:1.5;transition:background .3s,color .3s}
+  h1,h2,.serif{font-family:"Newsreader",Georgia,serif;font-weight:400;letter-spacing:-.01em}
+
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;padding:28px 32px 8px;max-width:1500px;margin:0 auto}
+  .topbar h1{font-size:calc(28px * var(--ts));margin:0}
+  .topbar p{margin:0;color:var(--slate);max-width:56ch}
+  .toggle{background:var(--paper);border:1px solid var(--mist);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;font:inherit;font-size:calc(14px * var(--ts))}
+  .toggle:focus-visible{outline:2px solid var(--light);outline-offset:2px}
+
+  .tokens{display:flex;gap:20px;flex-wrap:wrap;padding:12px 32px 28px;max-width:1500px;margin:0 auto;align-items:flex-end}
+  .swatch{width:96px}
+  .swatch i{display:block;height:44px;border-radius:8px;border:1px solid var(--mist)}
+  .swatch b{display:block;font-weight:500;font-size:calc(13px * var(--ts));margin-top:6px}
+  .swatch span{font-size:calc(12px * var(--ts));color:var(--slate)}
+  .typespec{margin-left:auto;color:var(--slate);font-size:calc(14px * var(--ts));max-width:34ch}
+  .typespec strong{font-family:"Newsreader",serif;font-weight:500;color:var(--ink);font-size:calc(18px * var(--ts))}
+
+  .screens{display:flex;gap:28px;padding:0 32px 48px;overflow-x:auto;scroll-snap-type:x mandatory}
+  .screen{scroll-snap-align:start;flex:0 0 auto}
+  .caption{color:var(--slate);font-size:calc(14px * var(--ts));margin:0 0 12px 6px;max-width:36ch}
+  .caption b{color:var(--ink);font-weight:500}
+
+  .phone{width:360px;height:740px;background:var(--fog);border-radius:36px;box-shadow:var(--shadow);border:1px solid var(--mist);position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .status{display:flex;justify-content:space-between;padding:14px 26px 0;font-size:calc(13px * var(--ts));color:var(--slate)}
+  .body{flex:1;padding:22px 24px 0;display:flex;flex-direction:column;min-height:0}
+
+  /* the fixed point — the only ornament in the product */
+  .point{width:8px;height:8px;border-radius:50%;background:var(--light);display:inline-block;box-shadow:0 0 0 4px var(--light-soft)}
+
+  /* Now card */
+  .now{padding:22px 22px 18px;background:var(--paper);border-radius:20px;border:1px solid var(--mist)}
+  .now .when{display:flex;align-items:center;gap:10px;font-size:calc(13px * var(--ts));color:var(--slate);margin-bottom:12px}
+  .now h2{font-size:calc(26px * var(--ts));line-height:1.25;margin:0 0 10px}
+  .now p{margin:0 0 16px;color:var(--slate)}
+  .btn{display:inline-block;font:inherit;font-weight:600;font-size:calc(15px * var(--ts));padding:12px 18px;border-radius:12px;border:0;cursor:pointer}
+  .btn.primary{background:var(--btn-bg);color:var(--btn-fg)}
+  [data-theme="dark"] .btn.primary{background:var(--btn-bg);color:var(--btn-fg)}
+  .btn.quiet{background:transparent;color:var(--slate);padding:12px 10px}
+
+  .thread{flex:1;overflow:hidden;margin-top:18px;display:flex;flex-direction:column;gap:14px}
+  .msg{max-width:88%;font-size:calc(15.5px * var(--ts));line-height:1.45}
+  .msg.you{align-self:flex-end;background:var(--paper);border:1px solid var(--mist);padding:10px 14px;border-radius:16px 16px 4px 16px;color:var(--ink)}
+  .msg.dhruva{align-self:flex-start;padding:2px 4px;font-family:"Newsreader",serif;font-size:calc(17px * var(--ts));color:var(--ink)}
+  .chips{display:flex;gap:8px;margin-top:8px}
+  .chip{font-size:calc(13px * var(--ts));padding:6px 12px;border-radius:999px;border:1px solid var(--mist);color:var(--slate);background:transparent}
+  .composer{margin:auto -24px 0;padding:14px 24px 26px;border-top:1px solid var(--mist);display:flex;gap:10px;align-items:center}
+  .composer .field{flex:1;background:var(--paper);border:1px solid var(--mist);border-radius:14px;padding:12px 14px;color:var(--slate);font-size:calc(15px * var(--ts))}
+  .composer .send{width:40px;height:40px;border-radius:50%;background:var(--btn-bg);color:var(--btn-fg);display:grid;place-items:center;font-size:calc(18px * var(--ts))}
+
+  /* Review */
+  .review h2.title{font-size:calc(24px * var(--ts));margin:0 0 4px}
+  .review .sub{color:var(--slate);margin:0 0 22px;font-size:calc(14px * var(--ts))}
+  .mv{margin-bottom:22px}
+  .mv h3{font-family:"Newsreader",serif;font-weight:500;font-size:calc(17px * var(--ts));margin:0 0 6px;display:flex;align-items:center;gap:10px}
+  .mv p{margin:0;font-size:calc(15px * var(--ts));color:var(--ink)}
+  .mv.star p{font-family:"Newsreader",serif;font-size:calc(18px * var(--ts))}
+  .fade{position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(transparent,var(--fog))}
+
+  /* Focus */
+  .focus{background:var(--paper)}
+  .focus .body{align-items:center;text-align:center;justify-content:center;gap:0}
+  .focus .task{font-family:"Newsreader",serif;font-size:calc(24px * var(--ts));line-height:1.3;margin:0 0 34px;max-width:24ch}
+  .ring{width:180px;height:180px;border-radius:50%;border:1.5px solid var(--mist);display:grid;place-items:center;position:relative}
+  .ring .arc{position:absolute;inset:-1.5px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--light);border-right-color:var(--light);transform:rotate(-30deg)}
+  .ring .time{font-family:"Newsreader",serif;font-size:calc(44px * var(--ts));font-weight:400;font-variant-numeric:tabular-nums}
+  .absolve{margin-top:38px;color:var(--slate);max-width:26ch;font-size:calc(15px * var(--ts))}
+  .focus .capture{margin-top:auto;margin-bottom:26px;width:100%;background:var(--fog);border:1px solid var(--mist);border-radius:14px;padding:12px 14px;color:var(--slate);font-size:calc(15px * var(--ts))}
+
+  /* Hospice */
+  .dim{position:absolute;inset:0;background:rgba(31,42,51,.35)}
+  [data-theme="dark"] .dim{background:rgba(0,0,0,.55)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:24px 24px 0 0;padding:18px 22px 26px}
+  .handle{width:36px;height:4px;border-radius:2px;background:var(--mist);margin:0 auto 18px}
+  .sheet h2{font-size:calc(22px * var(--ts));margin:0 0 6px}
+  .sheet .lead{color:var(--slate);margin:0 0 16px;font-size:calc(15px * var(--ts))}
+  .dormant{list-style:none;margin:0 0 18px;padding:0}
+  .dormant li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--mist);font-size:calc(15px * var(--ts))}
+  .dormant li:last-child{border-bottom:1px solid var(--mist)}
+  .keep{font-size:calc(13px * var(--ts));color:var(--slate);border:1px solid var(--mist);border-radius:999px;padding:4px 12px;background:transparent}
+  .keep.on{color:var(--ink);border-color:var(--ink)}
+  .sheet .btn.primary{width:100%;text-align:center}
+  .sheet .note{text-align:center;color:var(--slate);font-size:calc(13px * var(--ts));margin:12px 0 0}
+
+  /* Quiet */
+  .quiet .body{justify-content:center;align-items:center;text-align:center}
+  .quiet .glow{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--light-soft) 0%,transparent 70%);display:grid;place-items:center;margin-bottom:28px}
+  .quiet h2{font-size:calc(28px * var(--ts));margin:0 0 10px;line-height:1.25}
+  .quiet p{color:var(--slate);margin:0;max-width:26ch;font-size:calc(15px * var(--ts))}
+  .quiet .asleep{margin-top:44px;font-size:calc(13px * var(--ts));color:var(--slate)}
+  .quiet .asleep span{display:block;margin-top:4px}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- Cross-age adjustments ---- */
+/* Follow the system theme unless the person chose one */
+@media (prefers-color-scheme: dark){ body:not([data-theme="light"]){--slate-boost:#B4BCC2;--fog:#171A1D;--paper:#1F2327;--ink:#E6E8E9;--slate:#98A1A8;--mist:#30363B;--light:#D4A64A;--light-soft:#3A3122;--btn-bg:#E6E8E9;--btn-fg:#171A1D;--shadow:0 30px 60px rgba(0,0,0,.5);} }
+/* Contrast boost: follows OS high-contrast, or the toggle */
+@media (prefers-contrast: more){ :root{--slate:var(--slate-boost)} }
+body[data-contrast="boost"]{--slate:var(--slate-boost)}
+body[data-contrast="boost"] .mist-dep{border-color:var(--slate)}
+/* Serif only where it is large: the directive, review headings, quiet headline, focus task, sheet title. Body prose and chat messages are sans. */
+.msg.dhruva{font-family:"Source Sans 3",system-ui,sans-serif;font-size:calc(17px * var(--ts))}
+.mv p{font-family:"Source Sans 3",system-ui,sans-serif}
+.mv.star p{font-family:"Source Sans 3",system-ui,sans-serif;font-size:calc(17px * var(--ts))}
+.now p{font-size:calc(17px * var(--ts))}
+/* Tap targets >= 48px */
+.btn,.keep,.chip,.composer .send,.toggle{min-height:48px;display:inline-flex;align-items:center;justify-content:center}
+.keep,.chip{padding:0 16px}
+.composer .send{width:48px;height:48px}
+.composer .field{min-height:48px;display:flex;align-items:center}
+/* Text can grow to 200%: the phone body scrolls instead of clipping */
+.body{overflow-y:auto}
+.thread{overflow:visible;flex:1 0 auto}
+/* Bold-text setting: never rely on weight 400 for the directive */
+.now h2{font-weight:500}
+/* No motion on the Now marker or the quiet halo; only brief transitions on state change */
+.point,.quiet .glow{animation:none;transition:none}
+.btn,.keep{transition:background-color .15s ease,border-color .15s ease}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.controls .toggle[aria-pressed="true"]{background:var(--ink);color:var(--fog);border-color:var(--ink)}
+.controls small{color:var(--slate);font-size:calc(13px * var(--ts))}
+</style></head>
+<body>
+<div class="topbar">
+  <div><h1>Dhruva — Final · First Light, all ages</h1><p>First Light with the cross-age adjustments applied: 17px base text that scales to 200%, a contrast boost that follows the OS high-contrast setting, serif only above 20px (body prose and chat are sans), 48px tap targets, system theme following, and no ambient motion. Gold is decorative only — every meaning is carried by a word, a border or a position. Use the controls to see it at 200% and with contrast boosted.</p></div>
+  <div class="controls">
+    <button class="toggle" onclick="var b=document.body;b.dataset.theme=b.dataset.theme==='dark'?'light':'dark';this.textContent=b.dataset.theme==='dark'?'View at 7am':'View at 10pm'">View at 10pm</button>
+    <button class="toggle" aria-pressed="false" onclick="var b=document.body;var on=b.dataset.contrast!=='boost';b.dataset.contrast=on?'boost':'';this.setAttribute('aria-pressed',on)">Boost contrast</button>
+    <button class="toggle" onclick="var r=document.documentElement;var s=[1,1.5,2];var c=parseFloat(getComputedStyle(r).getPropertyValue('--ts'))||1;var n=s[(s.indexOf(c)+1)%s.length];r.style.setProperty('--ts',n);this.textContent='Text '+Math.round(n*100)+'%'">Text 100%</button>
+    <small>Theme follows the phone's setting; these buttons override it for review.</small>
+  </div>
+</div>
+<div class="tokens"><div class="swatch"><i style="background:var(--fog)"></i><b>Base</b><span>canvas</span></div><div class="swatch"><i style="background:var(--paper)"></i><b>Surface</b><span>cards, sheets</span></div><div class="swatch"><i style="background:var(--ink)"></i><b>Ink</b><span>text</span></div><div class="swatch"><i style="background:var(--slate)"></i><b>Slate</b><span>secondary</span></div><div class="swatch"><i style="background:var(--mist)"></i><b>Mist</b><span>rules</span></div><div class="swatch"><i style="background:var(--light)"></i><b>Accent</b><span>one thing per screen</span></div>
+  <div class="typespec"><strong>Newsreader</strong> only at 20px and above — the directive, headings, the quiet headline. Source Sans 3 for all body prose, chat and labels. Measured on the light base: ink 13:1, slate 4.9:1 (boosted 7.2:1), gold point 3.45:1 non-text; dark: slate 6.6:1, gold 7:1.</div>
+</div>
+<div class="screens">
+
+  <!-- 1. Chat / Now -->
+  <div class="screen">
+    <p class="caption"><b>Chat / Now.</b> The directive is set in the serif because it's Dhruva speaking. The warm point marks only the one thing that is now; nothing else on the screen is allowed to be warm.</p>
+    <div class="phone">
+      <div class="status"><span>7:42</span><span>Mon 14 Sep</span></div>
+      <div class="body">
+        <div class="now">
+          <div class="when"><i class="point"></i> Now — clinic line opens at 8</div>
+          <h2>Call the urology clinic, 10 minutes.</h2>
+          <p>Next month's slots release today and go within a day. Everything else is not your problem until 8:15.</p>
+          <button class="btn primary">Start</button>
+          <button class="btn quiet">Hand it to Anna</button>
+        </div>
+        <div class="thread">
+          <div class="msg you">publish hotfix, reply to Priya re coveo, renew VPN cert</div>
+          <div class="msg dhruva">Got all three. The VPN cert wakes a week before expiry — you won't see it until then.</div>
+          <div class="msg you">move the log noise thing to next week again</div>
+          <div class="msg dhruva">That's the third move, so a fourth date isn't the answer. Is it unclear how to fix, boring, or the platform team's job?
+            <div class="chips"><span class="chip">Unclear</span><span class="chip">Boring</span><span class="chip">Not mine</span></div>
+          </div>
+        </div>
+        <div class="composer"><div class="field">What's on your mind</div><div class="send">↑</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Weekly review -->
+  <div class="screen">
+    <p class="caption"><b>Weekly review.</b> Prose, not panels. Five movements read like a letter; the only structure is the section name and a rule of white space. The warm point appears once, on the star.</p>
+    <div class="phone">
+      <div class="status"><span>7:31</span><span>Sun 13 Sep</span></div>
+      <div class="body review">
+        <h2 class="title">Sunday, with coffee.</h2>
+        <p class="sub">Two minutes.</p>
+        <div class="mv"><h3>The week, witnessed</h3><p>The deployment saga is closed — that loop ran three weeks. PF call done in nine minutes on Saturday, as predicted. You released the Rust idea, cleanly. Suprabhatam restarted after Wednesday. Three evenings fully offline with the family.</p></div>
+        <div class="mv"><h3>The shape</h3><p>Work-heavy Monday to Thursday, family took the weekend back. Finance had its best week this quarter. Health went quiet after Tuesday.</p></div>
+        <div class="mv"><h3>One pattern</h3><p>Both money wins happened Saturday morning; both weekday attempts died. Should I stop proposing weekday finance slots altogether?</p></div>
+        <div class="mv"><h3>Letting go</h3><p>Four things haven't moved in a month. Keep any; the rest go, and that counts as deciding.</p></div>
+        <div class="mv star"><h3><i class="point"></i> The star</h3><p>Dad's follow-up window opens Thursday. Booking it is the week's one immovable thing. Everything else is negotiable.</p></div>
+      </div>
+      <div class="fade"></div>
+    </div>
+  </div>
+
+  <!-- 3. Focus block -->
+  <div class="screen">
+    <p class="caption"><b>Focus block.</b> A held boundary, not a stopwatch. The ring is a hairline, the elapsed arc is the one warm thing, and the absolution sentence sits under the time because it's the product. Capture stays open at the bottom, quiet.</p>
+    <div class="phone focus">
+      <div class="status"><span>8:04</span><span>Focus</span></div>
+      <div class="body">
+        <p class="task">Deployment writeup — it unblocks Priya and Sam today.</p>
+        <div class="ring"><div class="arc"></div><div class="time">76:00</div></div>
+        <p class="absolve">Everything else is officially not your problem until 9:30.</p>
+        <div class="capture">Got a thought? Drop it here — after.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Hospice -->
+  <div class="screen">
+    <p class="caption"><b>Hospice.</b> A bottom sheet so the review stays visible behind it — this is one moment inside Sunday, not a task list. Releasing is the primary action; keeping is the small opt-in. No red, no trash icons.</p>
+    <div class="phone">
+      <div class="status"><span>7:33</span><span>Sun 13 Sep</span></div>
+      <div class="body review" style="opacity:.6">
+        <h2 class="title">Sunday, with coffee.</h2>
+        <p class="sub">Two minutes.</p>
+        <div class="mv"><h3>The week, witnessed</h3><p>The deployment saga is closed — that loop ran three weeks. PF call done in nine minutes on Saturday.</p></div>
+      </div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="handle"></div>
+        <h2>Six things, quiet for a month.</h2>
+        <p class="lead">Tap keep on any. The rest go, and letting them go counts as deciding.</p>
+        <ul class="dormant">
+          <li>Evaluate Coveo alternative <span class="keep">Keep</span></li>
+          <li>Read the attention-management book <span class="keep">Keep</span></li>
+          <li>Car service quote <span class="keep on">Kept</span></li>
+          <li>Reorganise Google Drive <span class="keep">Keep</span></li>
+          <li>Try Obsidian <span class="keep">Keep</span></li>
+          <li>Research standing desk <span class="keep">Keep</span></li>
+        </ul>
+        <button class="btn primary">Let the other five go</button>
+        <p class="note">They won't come back unless you bring them back.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Quiet -->
+  <div class="screen">
+    <p class="caption"><b>Quiet.</b> The screen has to look finished, not empty. The warm point gets its only halo here — a fixed light in an open sky — and the sleeping items are named so the silence is trustworthy.</p>
+    <div class="phone quiet">
+      <div class="status"><span>19:10</span><span>Mon 14 Sep</span></div>
+      <div class="body">
+        <div class="glow"><i class="point"></i></div>
+        <h2>Nothing needs you right now.</h2>
+        <p>That's real. Go be with him.</p>
+        <div class="asleep">Three things are asleep on purpose
+          <span>VPN cert wakes on the 20th</span>
+          <span>Sprint prep wakes Monday 8am</span>
+          <span>Coveo review wakes when Priya replies</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
