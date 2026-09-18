@@ -277,10 +277,12 @@ git diff --check
 
 ### W1-05 — Implement server configuration, verified owner access and transactions
 
-**Files:** API `src/lib/env.ts`, `auth.ts`, `db.ts`; `apps/api/.env.example`.
+**Files:** API `src/lib/env.ts`, `auth.ts`, `db.ts`; `apps/api/.env.example`; `apps/api/package.json`; `pnpm-lock.yaml`.
 **Functions:** `readServerEnv`, `requireOwner`, `getPool`, `withTransaction`.
+**Dependencies authorized:** declare and lock the already-required server-only `pg` connection pool (§3) with its `@types/pg` types, and the `vitest` test runner as an API dev dependency so this and later API tickets can validate their Done conditions. Versions must be compatible with the pinned Next/Node toolchain. No other package is authorized.
 **Work:** fail on missing secrets, verify tokens through Supabase, match `OWNER_USER_ID`, and supply a transaction-capable server connection. Never trust a decoded JWT alone.
 **Done:** no token/invalid token → 401; another valid user → 403; owner allowed; a forced error rolls back transaction writes and releases the connection.
+**Validation:** `pnpm install --frozen-lockfile`; `pnpm --filter api exec tsc --noEmit --incremental false`; the Done cases run against a disposable local Supabase database; `git diff --check`.
 **Depends on:** W1-01, W1-03.
 
 ### W1-06 — Implement singleton conversation, history and source-item lookup
@@ -301,16 +303,19 @@ git diff --check
 
 ### W1-08 — Implement native durable storage adapters
 
-**Files:** mobile `src/storage.ts`.
+**Files:** mobile `src/storage.ts`; `apps/mobile/package.json`; `pnpm-lock.yaml`.
 **Functions:** `authStorage.getItem/setItem/removeItem`, `readOutbox`, `putOutboxCapture`, `removeOutboxCapture`, `savePendingDestination`, `takePendingDestination`.
+**Dependencies authorized:** declare and lock the already-required `expo-secure-store` and `@react-native-async-storage/async-storage` packages (§5) using versions compatible with the repository's pinned Expo SDK and package manager. No other package is authorized.
 **Work:** separate secure SDK session storage from owner-scoped pending capture storage; preserve capture IDs/body/reply targets on restart. Permit only `/chat` or `/setup` destinations.
 **Done:** full-size session round-trip succeeds; simulated app restart preserves one pending capture; another identity cannot submit it; removal happens only through an explicit acknowledged completion path.
+**Validation:** `pnpm install --frozen-lockfile`; `pnpm --filter mobile exec tsc --noEmit --incremental false`; Done cases exercised with in-memory fakes of the two native modules; `git diff --check`.
 **Depends on:** W1-01, W1-02.
 
 ### W1-09 — Implement email-link request and session provider
 
-**Files:** mobile `src/auth.tsx`, `app/_layout.tsx`, `app/sign-in.tsx`.
+**Files:** mobile `src/auth.tsx`, `app/_layout.tsx`, `app/sign-in.tsx`; `apps/mobile/package.json`; `pnpm-lock.yaml`.
 **Functions:** `getAuthClient`, `requestMagicLink`, `AuthProvider`, `useAuth`, `RootLayout`, `SignInScreen`.
+**Dependencies authorized:** declare and lock the Supabase JavaScript client (`@supabase/supabase-js`) required by `getAuthClient` (§5, §7), and only a URL/polyfill package if the pinned client version documents it as mandatory on React Native. No other package is authorized.
 **Work:** native session restoration/loading, email-only request/resend, owner pre-provisioning documentation and foreground refresh. `shouldCreateUser:false` and fixed callback are mandatory.
 **Done:** requesting a link does not create accounts; sign-in/loading/resend states render; no password UI; secure session persists across restart. Callback establishment awaits W1-10/11.
 **Depends on:** W1-08; PKCE configuration follows the recorded B2 decision and W1-10 checks.
