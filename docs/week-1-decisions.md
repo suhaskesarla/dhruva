@@ -57,3 +57,40 @@ Keep the original message's `intake_results` immutable once initial classificati
 ## Handoff status
 
 The Week 1 plan and supplied draft conversation migration have been updated to reflect these decisions. The plan now contains the affected contract/function signatures and revised tickets, particularly W1-14–16, W1-19 and W1-22. Runtime contracts, routes, screens and ticket implementations still need to be built in the actual repository; no repository was supplied or changed here.
+
+## W1-02 — Shared contract packaging and dependency boundary
+
+`@dhruva/contracts` is a private ESM workspace package with a single source export,
+`./src/index.ts`. Both app manifests declare `workspace:*`; the existing app
+TypeScript include patterns cover their dedicated smoke modules. The mobile
+fixture module lives at `src/contracts.smoke.ts`, outside Expo Router's `src/app`.
+No application entrypoint or TypeScript resolution override is needed.
+
+Zod `3.25.76` is the sole runtime dependency. The API smoke test uses the existing
+TypeScript compiler to inspect every contracts source file: only static imports
+from `zod` are allowed; external re-exports, other module references, dynamic
+imports, `require` calls and triple-slash references are rejected. It checks the
+package manifests, including the resolved Zod package's absence of runtime
+dependencies, and verifies that both app projects include their smoke modules
+and resolve the package to `packages/contracts/src/index.ts`. This keeps API and
+private database code outside the shared dependency graph available to mobile.
+
+Public history schemas project only public DTO fields, dropping classifier
+results, candidates and the removed reverse `item_id` field. Source-item lookup
+uses validated `source_message_id`. Item status remains a string matching the
+existing storage contract; this package does not introduce a lifecycle engine.
+Classifier scores are integers from 0 through 5. Initial arrays allow at most one
+question across all results; answer arrays allow none. Empty arrays are permitted.
+Memory candidates remain classifier output and do not imply an item row.
+
+First-pass snapshot types are deeply readonly. Clarification plans identify an
+unconsumed context, keep answer output separate, and restrict updates to
+classifier-managed fields. Event payloads retain original/question/answer IDs
+and classified result indices. Transactional immutability, ownership checks,
+source/raw-text preservation and once-only consumption remain obligations of
+the downstream persistence implementation; these declarations do not perform
+writes or locks. Local captures retain readonly request/owner identity with
+`pending`, `sending` or `failed` delivery state; acknowledgment removes the
+outbox entry. Onboarding accepts optional initial facts, requires all eight
+unique domains and validates timezone, finite positive weights and nullable
+positive integer thresholds. No notification-permission behavior is included.

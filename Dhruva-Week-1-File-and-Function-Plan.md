@@ -240,17 +240,30 @@ Each ticket includes its own boundary and acceptance conditions. Dependencies re
 
 ### W1-02 — Publish the shared Week 1 contracts
 
-**Files:** `packages/contracts/package.json`, `tsconfig.json`, `src/index.ts`; `docs/week-1-decisions.md`.
-**Functions:** no implementation; export the types/Zod schemas in §4.
-**Work:** define capture/history/onboarding DTOs and all five classifier destinies. Keep private classifier metadata out of public message history. Implement the resolved B3/B4 source-item query, immutable first-pass snapshot and single-round clarification contracts; remove `MessageDTO.item_id`.
-**Done:** both apps import the package; invalid UUIDs, nonarray results and illegal destinies fail validation; no API/private database code is imported into the mobile bundle.
+**Files:** `packages/contracts/package.json`, `packages/contracts/tsconfig.json`, `packages/contracts/src/index.ts`; `docs/week-1-decisions.md`; `apps/api/package.json`; `apps/mobile/package.json`; `pnpm-lock.yaml`; `apps/api/src/contracts.smoke.test.ts`; `apps/mobile/src/contracts.smoke.ts`.
+**Functions/modules:** export the types/Zod schemas in §4; API contract-validation and dependency-boundary smoke tests in `apps/api/src/contracts.smoke.test.ts`; typed mobile smoke fixtures in `apps/mobile/src/contracts.smoke.ts`.
+**Work:** define capture/history/onboarding DTOs and all five classifier destinies. Keep private classifier metadata out of public message history. Implement the resolved B3/B4 source-item query, immutable first-pass snapshot and single-round clarification contracts; remove `MessageDTO.item_id`. Both apps declare `"@dhruva/contracts": "workspace:*"`. Configure `packages/contracts/package.json` with the proposed package name `@dhruva/contracts`, ESM, source exports from `./src/index.ts` and Zod `3.25.76` as its sole runtime dependency. The API smoke test imports public contracts by package name, tests valid input, and rejects invalid UUIDs, nonarray results and illegal destinies. The mobile smoke module imports representative public DTO and runtime schema exports by package name and exports typed smoke fixtures without becoming an Expo route. Use the existing TypeScript compiler in the API smoke test to check the contracts dependency boundary: contracts may statically import only `zod`; reject external re-exports, other module references, dynamic imports and `require` calls; runtime dependencies must contain only Zod; resolved Zod must have no runtime dependencies. Record packaging and boundary decisions in `docs/week-1-decisions.md`. No root `package.json`, `pnpm-workspace.yaml`, `tsconfig.base.json`, app tsconfig or application entrypoint changes are authorized.
+**Done:** both apps import the package; valid input passes and invalid UUIDs, nonarray results and illegal destinies fail validation; no API/private database code is imported into the mobile bundle. Both TypeScript app checks include their dedicated smoke modules and resolve `@dhruva/contracts` to `packages/contracts/src/index.ts`. The API smoke test enforces the contracts dependency boundary above; the mobile smoke fixtures type-check without becoming an Expo route; packaging and boundary decisions are recorded in `docs/week-1-decisions.md`.
+**Validation commands:**
+
+```sh
+pnpm install --lockfile-only
+pnpm install --frozen-lockfile
+pnpm --filter api exec tsc --project ../../packages/contracts/tsconfig.json --noEmit --incremental false
+pnpm --filter api exec tsc --noEmit --incremental false
+pnpm --filter mobile exec tsc --noEmit --incremental false
+pnpm --filter api exec node --test src/contracts.smoke.test.ts
+pnpm --filter api lint
+git diff --check
+```
+
 **Depends on:** W1-01.
 
 ### W1-03 — Apply the baseline and conversation migration
 
-**Files:** `supabase/config.toml`; `202609080001_base.sql`; supplied `202609080002_conversations_messages.sql` under `supabase/migrations/`.
+**Files:** `supabase/config.toml`; `202609080001_base.sql`; `202609080002_conversations_messages.sql` under `supabase/migrations/`.
 **Functions:** none; DDL only.
-**Work:** transcribe original §1.1 and append the revised supplied migration with indexed `items.source_message_id` and no `messages.item_id`. Keep future-system tables inert.
+**Work:** transcribe original §1.1. W1-03 is authorized to author `supabase/migrations/202609080002_conversations_messages.sql` directly from the authoritative schema requirements in plan §7, the architecture addendum, and resolved decision B3. These sources replace the unavailable “supplied migration” artifact. Introduce no schema behavior beyond those authoritative sources. Include indexed `items.source_message_id` and no `messages.item_id`. Keep future-system tables inert. Preserve the security requirements, relationship restrictions, indexes and migration validation requirements in §8. The ticket must become Blocked again if any SQL behavior is unspecified or contradictory.
 **Done:** a fresh disposable Supabase reset succeeds; singleton/check/FK restrictions and history indexes exist; anon/authenticated cannot access messages; the server can insert a user message and a reply-linked assistant response plus multiple items referencing the same original message.
 **Depends on:** W1-01. Does not need live Gemini or mobile auth.
 
